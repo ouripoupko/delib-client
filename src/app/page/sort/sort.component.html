@@ -1,0 +1,33 @@
+<div mat-dialog-title>Sort by dragging up and down</div>
+<div mat-dialog-content cdkDropListGroup>
+    <mat-list class="support" cdkDropList id="support" (cdkDropListDropped)="drop($event)">
+        <mat-list-item *ngIf="support.length == 0">drag here statements you support</mat-list-item>
+        <ng-container *ngFor="let key of support; let last = last">
+            <mat-list-item cdkDrag>
+                {{data.statements[key].text}}
+            </mat-list-item>
+            <mat-divider *ngIf="!last"></mat-divider>
+        </ng-container>
+    </mat-list>
+    <mat-list cdkDropList id="unsorted" (cdkDropListDropped)="drop($event)">
+        <ng-container *ngFor="let key of unsorted; let last = last">
+            <mat-list-item cdkDrag>
+                {{data.statements[key].text}}
+            </mat-list-item>
+            <mat-divider *ngIf="!last"></mat-divider>
+        </ng-container>
+    </mat-list>
+    <mat-list class="oppose" cdkDropList id="oppose" (cdkDropListDropped)="drop($event)">
+        <mat-list-item *ngIf="oppose.length == 0">drag here statements you oppose</mat-list-item>
+        <ng-container *ngFor="let key of oppose; let last = last">
+            <mat-list-item cdkDrag>
+                {{data.statements[key].text}}
+            </mat-list-item>
+            <mat-divider *ngIf="!last"></mat-divider>
+        </ng-container>
+    </mat-list>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="[support, oppose]">Ok</button>
+</div>

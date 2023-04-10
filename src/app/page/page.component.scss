@@ -1,0 +1,38 @@
+.full-height {
+    height: 100vh; /* Set the height to 100% of the viewport height */
+    display: flex; /* Use flexbox to center the content vertically */
+    flex-direction: column; /* Center the content vertically */
+    justify-content: center; /* Center the content vertically */
+}
+
+.stretch {
+    flex-grow: 1; /* Allow the content to fill up the remaining height */
+}
+
+.line-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+  
+.line-left {
+    margin-right: auto;
+}
+  
+.line-right {
+    margin-left: 10px;
+}
+
+.mat-divider.support {
+    border-top-color: #c0ffc0;
+    border-top-width: 5px;
+}
+
+.mat-divider.oppose {
+    background-color: #ffc0c0;
+    border-top-width: 5px;
+}
+
+.mat-divider.mat-divider-inset {
+    margin-left: 70px;
+}
