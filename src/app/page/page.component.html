@@ -9,7 +9,12 @@
                 <ng-container *ngFor="let key of order; let first = first;">
                     <div *ngIf="key == 'support' || key == 'oppose'; then thenBlock else elseBlock"></div>
                     <ng-template #thenBlock>
-                        <mat-divider [ngClass]="{'support': key == 'support', 'oppose': key == 'oppose'}" [inset]="true"></mat-divider>
+                        <mat-list-item (click)="onFocus(key)">
+                            <div matListItemAvatar><ng-container *ngIf="first">{{index+1}}</ng-container></div>
+                            <div matListItemLine>
+                                <mat-divider [ngClass]="{'support': key == 'support', 'oppose': key == 'oppose'}"/>
+                            </div>
+                        </mat-list-item>
                     </ng-template>
                     <ng-template #elseBlock>
                         <mat-list-item (click)="onFocus(key)">
