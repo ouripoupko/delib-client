@@ -1,10 +1,10 @@
 <mat-card class="full-height">
     <mat-card-header>
-        <mat-card-title>{{delibService.parent ? delibService.parent.text : 'Topics:'}}</mat-card-title>
+        <mat-card-title dir="auto">{{delibService.parent ? delibService.parent.text : 'Topics:'}}</mat-card-title>
         <mat-card-subtitle *ngIf="delibService.parent">{{getName(delibService.parent.owner)}}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content class="stretch">
-        <mat-list>
+        <mat-list (mouseleave)="hoverElement=''">
             <ng-container *ngFor="let order of delibService.aggregateOrder; let index=index; let last = last;">
                 <ng-container *ngFor="let key of order; let first = first;">
                     <div *ngIf="key == 'support' || key == 'oppose'; then thenBlock else elseBlock"></div>
@@ -17,10 +17,10 @@
                         </mat-list-item>
                     </ng-template>
                     <ng-template #elseBlock>
-                        <mat-list-item (click)="onFocus(key)">
+                        <mat-list-item dir="auto" (click)="onFocus(key)" (mouseenter)="hoverElement=key">
                             <div matListItemAvatar><ng-container *ngIf="first">{{index+1}}</ng-container></div>
                             <div matListItemTitle>{{delibService.kids[key].text}}</div>
-                            <div matListItemLine>{{getName(delibService.kids[key].owner)}}</div>
+                            <div matListItemLine *ngIf="hoverElement==key">{{getName(delibService.kids[key].owner)}} {{hoverElement}}</div>
                         </mat-list-item>
                     </ng-template> 
                 </ng-container>
@@ -37,6 +37,9 @@
         </button>
         <button color="primary" mat-fab *ngIf="delibService.parent && hasKids()" (click)="onSort()">
             <mat-icon >swap_vert</mat-icon>
+        </button>
+        <button color="warn" mat-fab *ngIf="delibService.parent && !hasKids() && delibService.parent.owner == delibService.agent" (click)="onDelete()">
+            <mat-icon >cancel</mat-icon>
         </button>
     </mat-card-actions>
 </mat-card>

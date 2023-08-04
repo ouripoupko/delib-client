@@ -20,18 +20,14 @@ export class SortComponent {
   ) {
     this.support = [...data.ranking[0]];
     this.oppose = [...data.ranking[1]];
-    let keys = new Set<string>(Object.keys(data.statements));
-    for(let key of this.support) {
-      keys.delete(key);
-    }
-    for(let key of this.oppose) {
-      keys.delete(key);
-    }
-    this.unsorted = Array.from(keys);
+    this.unsorted = Object.keys(data.statements);
+    this.support = this.support.filter( x => this.unsorted.includes(x) );
+    this.oppose = this.oppose.filter( x => this.unsorted.includes(x) );
+    this.unsorted = this.unsorted.filter( x => !this.support.includes(x) && !this.oppose.includes(x) )
     this.list_of_lists = {'unsorted': this.unsorted,
                           'support': this.support,
                           'oppose': this.oppose}
-}
+  }
 
   drop(event: CdkDragDrop<string[]>) {
     let key = this.list_of_lists[event.previousContainer.id][event.previousIndex];

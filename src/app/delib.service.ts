@@ -55,7 +55,15 @@ export class DelibService {
     this.agentService.write(this.server, this.agent, this.contract, method).subscribe();
   }
 
-  setAggregatedOrder() {
+  deleteStatement(): void {
+    console.log('delete', this.sid);
+    const method = { name: 'delete_statement',
+                     values: {'sid': this.sid}} as Method;
+    this.agentService.write(this.server, this.agent, this.contract, method)
+      .subscribe();
+  }
+
+  async setAggregatedOrder() {
     if(!this.parent || Object.keys(this.parent['ranking_kids']).length == 0) {
       this.aggregateOrder = [Object.keys(this.kids)];
     } else {
@@ -74,11 +82,13 @@ export class DelibService {
       for (let order of Object.values(ranking)) {
         let unordered = new Set(Object.keys(indexes));
         for (let above of order[0]) {
-          unordered.delete(above);
-          let above_index = indexes[above];
-          for (let below of unordered) {
-            let below_index = indexes[below];
-            sum_matrix[above_index][below_index] += 1;
+          if (unordered.has(above)) {
+            unordered.delete(above);
+            let above_index = indexes[above];
+            for (let below of unordered) {
+              let below_index = indexes[below];
+              sum_matrix[above_index][below_index] += 1;
+            }
           }
         }
         let above = 'support';
@@ -89,11 +99,13 @@ export class DelibService {
           sum_matrix[above_index][below_index] += 1;
         }
         for (let below of order[1].slice().reverse()) {
-          unordered.delete(below);
-          let below_index = indexes[below];
-          for (let above of unordered) {
-            let above_index = indexes[above];
-            sum_matrix[above_index][below_index] += 1;
+          if (unordered.has(below)) {
+            unordered.delete(below);
+            let below_index = indexes[below];
+            for (let above of unordered) {
+              let above_index = indexes[above];
+              sum_matrix[above_index][below_index] += 1;
+            }
           }
         }
         let below = 'oppose';
@@ -125,7 +137,7 @@ export class DelibService {
       for(rhs=1,lhs=0,prev=0;lhs<n;rhs=lhs+1) {
         // loop on a single set
         for(;lhs<rhs;lhs=rhs,rhs=row+1) {
-          // include candidates wit the same copeland score
+          // include candidates with the same copeland score
           for(;rhs<n&&copeland[order[rhs]]==copeland[order[rhs-1]];rhs++);
           // loop on rows and cols to find all zeros
           for(col=rhs,row=n;col==rhs&&row>=rhs;row--) {

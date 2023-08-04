@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add',
@@ -8,7 +9,11 @@ import { Component } from '@angular/core';
 export class AddComponent {
   statement: string = '';
 
+  constructor(
+    private dialogRef: MatDialogRef<AddComponent>
+  ) {}
+
   close() {
-    console.log('please close');
+    this.dialogRef.close(this.statement);
   }
 }

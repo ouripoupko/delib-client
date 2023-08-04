@@ -2,10 +2,10 @@
 <div mat-dialog-content>
   <mat-form-field appearance="fill">
     <mat-label>your statement</mat-label>
-    <input matInput [(ngModel)]="statement" cdkFocusInitial>
+    <textarea matInput cdkTextareaAutosize [(ngModel)]="statement" cdkFocusInitial (keydown.enter)="close()"></textarea>
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button [mat-dialog-close]="statement" #submit_button>Ok</button>
+  <button mat-button [mat-dialog-close]="statement">Ok</button>
 </div>

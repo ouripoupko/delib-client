@@ -1,11 +1,13 @@
 .full-height {
     height: 100vh; /* Set the height to 100% of the viewport height */
+    height: calc(var(--vh, 1vh) * 100);
     display: flex; /* Use flexbox to center the content vertically */
     flex-direction: column; /* Center the content vertically */
     justify-content: center; /* Center the content vertically */
 }
 
 .stretch {
+    overflow: auto;
     flex-grow: 1; /* Allow the content to fill up the remaining height */
 }
 

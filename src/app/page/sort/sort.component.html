@@ -1,9 +1,9 @@
 <div mat-dialog-title>Sort by dragging up and down</div>
-<div mat-dialog-content cdkDropListGroup>
+<div mat-dialog-content cdkDropListGroup cdkScrollable>
     <mat-list class="support" cdkDropList id="support" (cdkDropListDropped)="drop($event)">
         <mat-list-item *ngIf="support.length == 0">drag here statements you support</mat-list-item>
         <ng-container *ngFor="let key of support; let last = last">
-            <mat-list-item cdkDrag>
+            <mat-list-item dir="auto" cdkDrag>
                 {{data.statements[key].text}}
             </mat-list-item>
             <mat-divider *ngIf="!last"></mat-divider>
@@ -11,7 +11,7 @@
     </mat-list>
     <mat-list cdkDropList id="unsorted" (cdkDropListDropped)="drop($event)">
         <ng-container *ngFor="let key of unsorted; let last = last">
-            <mat-list-item cdkDrag>
+            <mat-list-item dir="auto" cdkDrag>
                 {{data.statements[key].text}}
             </mat-list-item>
             <mat-divider *ngIf="!last"></mat-divider>
@@ -20,7 +20,7 @@
     <mat-list class="oppose" cdkDropList id="oppose" (cdkDropListDropped)="drop($event)">
         <mat-list-item *ngIf="oppose.length == 0">drag here statements you oppose</mat-list-item>
         <ng-container *ngFor="let key of oppose; let last = last">
-            <mat-list-item cdkDrag>
+            <mat-list-item dir="auto" cdkDrag>
                 {{data.statements[key].text}}
             </mat-list-item>
             <mat-divider *ngIf="!last"></mat-divider>

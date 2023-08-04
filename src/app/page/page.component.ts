@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DelibService } from '../delib.service';
 import { AgentService } from '../agent.service';
@@ -14,6 +14,8 @@ import { Router } from '@angular/router';
 })
 export class PageComponent  implements OnInit {
 
+  hoverElement = '';
+  
   constructor(
     private route: ActivatedRoute,
     private agentService: AgentService,
@@ -23,6 +25,9 @@ export class PageComponent  implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    console.log('vh', vh);
     let encodedServer = this.route.snapshot.paramMap.get('server');
     let server = decodeURIComponent(encodedServer ? encodedServer : '');
     let agent = this.route.snapshot.paramMap.get('agent');
@@ -39,6 +44,12 @@ export class PageComponent  implements OnInit {
         console.log("Keep alive");
       }
     });
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
   }
 
   onAdd() {
@@ -79,6 +90,11 @@ export class PageComponent  implements OnInit {
         this.delibService.setRanking(this.delibService.sid as string, result);
       }
     });
+  }
+
+  onDelete() {
+    this.delibService.deleteStatement();
+    this.onDefocus();
   }
 
   getName(owner: string) {
