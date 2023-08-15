@@ -25,25 +25,26 @@ export class PageComponent  implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log('initializing page component');
     let vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
-    console.log('vh', vh);
-    let encodedServer = this.route.snapshot.paramMap.get('server');
-    let server = decodeURIComponent(encodedServer ? encodedServer : '');
-    let agent = this.route.snapshot.paramMap.get('agent');
-    if(!agent) {agent = '';}
-    let contract = this.route.snapshot.paramMap.get('contract');
-    if(!contract) {contract = '';}
-    this.delibService.setScope(server, agent, contract);
-    this.delibService.sid = this.route.snapshot.queryParamMap.get('sid')
-    this.delibService.getPage();
-    this.agentService.listen(server, agent, contract).addEventListener('message', message => {
-      if(message.data) {
-        this.delibService.getPage();
-      } else {
-        console.log("Keep alive");
-      }
-    });
+    let server = this.route.snapshot.queryParamMap.get('server') || '';
+    let agent = this.route.snapshot.queryParamMap.get('agent') || '';
+    let contract = this.route.snapshot.queryParamMap.get('contract') || '';
+    if (!server || !agent || !contract) {
+      this.router.navigate(['oops']);
+    } else {
+      this.delibService.setScope(server, agent, contract);
+      this.delibService.sid = this.route.snapshot.queryParamMap.get('sid')
+      this.delibService.getPage();
+      this.agentService.listen(server, agent, contract).addEventListener('message', message => {
+        if(message.data) {
+          this.delibService.getPage();
+        } else {
+          console.log("Keep alive");
+        }
+      });
+    }
   }
 
   @HostListener('window:resize', ['$event'])
@@ -62,22 +63,24 @@ export class PageComponent  implements OnInit {
   }
 
   onFocus(sid: string) {
-    this.router.navigate([encodeURIComponent(this.delibService.server),
-                          this.delibService.agent,
-                          this.delibService.contract],
-                         { queryParams: { sid: sid } });
+    this.router.navigate([],
+                         { queryParams: { server: this.delibService.server,
+                                          agent: this.delibService.agent,
+                                          contract: this.delibService.contract,
+                                          sid: sid } });
     this.delibService.sid = sid;
     this.delibService.getPage();
   }
 
   onDefocus() {
     let sid = this.delibService.parent ? this.delibService.parent.parent : null;
-    this.router.navigate([encodeURIComponent(this.delibService.server),
-                          this.delibService.agent,
-                          this.delibService.contract],
-                         { queryParams: sid ? { sid: sid } : null});
-     this.delibService.sid = sid;
-     this.delibService.getPage();
+    this.router.navigate([],
+      { queryParams: { server: this.delibService.server,
+                       agent: this.delibService.agent,
+                       contract: this.delibService.contract,
+                       sid: sid } });
+    this.delibService.sid = sid;
+    this.delibService.getPage();
   }
 
   onSort() {
